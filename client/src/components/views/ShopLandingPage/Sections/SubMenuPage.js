@@ -12,7 +12,8 @@ function SubMenuPage(props) {
         console.log('onClick', e);
         let newFilter = [];
         newFilter.push(parseInt(e.key))
-        props.handleFilters(newFilter);
+        console.log('filter클릭 결과', newFilter);
+        props.handleFilters(newFilter, 'clothes');
     }
 
     return (

@@ -84,17 +84,6 @@ app.get('/auth/google/callback',
   }
 )
 
-//페이스북 로그인
-app.get('/auth/facebook', passport.authenticate('facebook', {
-  authType: 'reauthenticate', //거부된 권한을 재요청
-  scope: ['public_profile', 'email']
-}));
-
-app.get('/auth/facebook/callback', passport.authenticate('facebook'), (req, res) => {
-  console.log('페이스북 콜백');
-  res.redirect("http://localhost:3000/");
-})
-
 //카카오 로그인
 app.get('/auth/kakao', passport.authenticate('kakao', {authType: 'reauthenticate',}));
 
@@ -103,9 +92,11 @@ app.get('/auth/kakao/callback', passport.authenticate('kakao'), (req, res) => {
 })
 
 //네이버 로그인
-app.get('/auth/naver', passport.authenticate('naver'))
+app.get('/auth/naver', passport.authenticate('naver', {
+  scope: ['profile', 'email']
+}));
 
-app.get('/auth/naver/callback', passport.authenticate('naver'), (req, res) => {
+app.get('/auth/naver/callback', passport.authenticate('naver', { failureRedirect: 'http://localhost;3000/error' }), (req, res) => {
   res.redirect("http://localhost:3000/");
 })
 

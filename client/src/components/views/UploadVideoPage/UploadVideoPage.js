@@ -101,7 +101,7 @@ function UploadVideoPage(props) {
         <div style={MenuStyle}>
             
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                <Title> Video Upload / 영상 업로드 </Title>
+                <Title> 영상 업로드 </Title>
             </div>
 
             <Form onSubmit={onSubmitHandler}>
@@ -109,16 +109,16 @@ function UploadVideoPage(props) {
                 <VideoUpload getFilePath={getFilePath} getThumbnailPath={getThumbnailPath} getDuration={getDuration}/>
                 <br />
                 <br />
-                <label>Video Name / 영상 이름</label>
+                <label>영상 이름</label>
                 <Input onChange={videoTitleHandler} value={VideoTitle} />
                 <br />
                 <br />
-                <label>Video Description / 영상 설명</label>
+                <label>영상 설명</label>
                 <TextArea onChange={descriptionHandler} value={Description} />
                 <br />
                 <br />
                 <Button type="primary" size="large" onClick={onSubmitHandler}>
-                    Video Upload / 업로드
+                    업로드
                 </Button>
             </Form>
         </div>

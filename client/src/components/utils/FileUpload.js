@@ -8,14 +8,21 @@ function FileUpload(props) {
     const [Images, setImages] = useState([])
 
     const dropHandler = (files) => {
+        console.log('files는 무엇입니까?', files);
 
         let formData = new FormData();
         const config = {
             header: { 'content-type': 'multipart/form-data' }
         }
         files.forEach(file => {
+            console.log("file은 뭡니까?", file);
             formData.append('file', file);
+            
         })
+        //formData 확인
+        for(let value of formData.values()) {
+            console.log('확인', value);
+        }
         axios.post('/api/product/image', formData, config)
             .then(response => {
                 if (response.data.success) {

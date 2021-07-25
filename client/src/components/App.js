@@ -40,12 +40,12 @@ function App() {
           <Route exact path="/Shop" component={Auth(ShopLandingPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/product/upload" component={Auth(UploadProductPage, true)} />
+          <Route exact path="/product/upload" component={Auth(UploadProductPage, true, true)} />
           <Route exact path="/product/:productId" component={Auth(DetailProductPage, null)} />
           <Route exact path="/user/cart" component={Auth(CartPage, true)} />
           <Route exact path="/history" component={Auth(HistoryPage, true)} />
           {/* Lookbook 관련 라우팅 */}
-          <Route exact path="/video/upload" component={Auth(UploadVideoPage, true)} />
+          <Route exact path="/video/upload" component={Auth(UploadVideoPage, true, true)} />
           <Route exact path="/Lookbook" component={Auth(MyTubePage, null)} />
           <Route exact path="/video/:videoId" component={Auth(DetailVideoPage, null)} />
           <Route exact path="/subscription" component={Auth(SubscriptionPage, true)} />

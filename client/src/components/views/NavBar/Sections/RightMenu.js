@@ -31,10 +31,10 @@ function RightMenu(props) {
       <div>
         <Menu mode={props.mode} style={MenuStyle}>
           <Menu.Item key="mail">
-            <a href="/login">Login</a>
+            <a href="/login">로그인</a>
           </Menu.Item>
           <Menu.Item key="app">
-            <a href="/register">Sign Up</a>
+            <a href="/register">가입하기</a>
           </Menu.Item>
         </Menu>
       </div>
@@ -51,7 +51,7 @@ function RightMenu(props) {
             </Badge>
           </Menu.Item>                                
           <Menu.Item key="logout">
-            <a onClick={logoutHandler}>Logout</a>
+            <a onClick={logoutHandler}>로그아웃</a>
           </Menu.Item>
         </Menu>
       )
@@ -62,10 +62,10 @@ function RightMenu(props) {
           {/* <Menu.Item key="history">
             <a href="/history">History</a>
           </Menu.Item> */}
-          <SubMenu title={<span>Upload</span>}>
-            <MenuItemGroup title="What would you like to upload?" style={MenuStyle}>
-              <Menu.Item key="product"><a href="/product/upload">Product Upload</a></Menu.Item>
-              <Menu.Item key="video"><a href="/video/upload">Video Upload</a></Menu.Item>
+          <SubMenu title={<span>업로드</span>}>
+            <MenuItemGroup title="무엇을 하시겠습니까?" style={MenuStyle}>
+              <Menu.Item key="product"><a href="/product/upload">상품 업로드</a></Menu.Item>
+              <Menu.Item key="video"><a href="/video/upload">비디오 업로드</a></Menu.Item>
             </MenuItemGroup>
           </SubMenu>
           <Menu.Item key="cart" style={{ paddingBottom: 3 }}>
@@ -76,7 +76,7 @@ function RightMenu(props) {
             </Badge>
           </Menu.Item>
           <Menu.Item key="logout">
-            <a onClick={logoutHandler}>Logout</a>
+            <a onClick={logoutHandler}>로그아웃</a>
           </Menu.Item>
         </Menu>
       )

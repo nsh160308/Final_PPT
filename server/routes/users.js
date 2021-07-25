@@ -98,7 +98,6 @@ router.post("/addToCart", auth, (req, res) => {
                     duplicateOptions = true;
                 }
             })
-
             //동일한 상품일 때,
             if(duplicateProduct) {
                 console.log('동일한 상품')
@@ -155,17 +154,14 @@ router.post("/addToCart", auth, (req, res) => {
 
 // 장바구니 삭제
 router.get('/removeFromCart', auth, (req, res) => {
-
     //axios가 준 제품 사이즈와 품번을 변수에 저장
     let size = req.query.size;
     let id = req.query.id;
     //알맞게 가져왔는지 디버깅
     console.log('사이즈',size);
     console.log('품번', id);
-
     //먼저 cart안에 내가 지우려고 한 상품을 지워주기 
-    //상품id랑 사이즈 두개를 조건으로 주면 그것만 삭제가 되겠지?
-
+    //상품id랑 사이즈 두개를 조건으로 주면 그것만 삭제
     User.findOneAndUpdate(
         {_id: req.user._id },
         {
@@ -191,49 +187,12 @@ router.get('/removeFromCart', auth, (req, res) => {
                 })
         }
     )
-
-    // User.findOneAndUpdate(
-    //     { _id: req.user._id },
-    //     {
-    //         "$pull": {
-    //             cart : {
-    //                 "cart._id": id,
-    //                 "cart.size": size
-    //             }
-    //         }
-    //     },
-    //     { new: true },
-    //     (err, userInfo) => {
-    //         if(err) {
-    //             console.log('error', err);
-    //         }
-
-    //         console.log('userInfo', userInfo);
-
-    //         let cart = userInfo.cart;
-    //         let array = cart.map(item => {
-    //             return item.id
-    //         })
-    //         //product collection에서  현재 남아있는 상품들의 정보를 가져오기 
-    //         //productIds = ['5e8961794be6d81ce2b94752', '5e8960d721e2ca1cb3e30de4'] 이런식으로 바꿔주기
-    //         Product.find({ _id: { $in: array } })
-    //             .populate('writer')
-    //             .exec((err, productInfo) => {
-    //                 return res.status(200).json({
-    //                     productInfo,
-    //                     cart
-    //                 })
-    //             })
-    //     }
-    // )
 })
 
 // 결제 성공
 router.post('/successBuy', auth, (req, res) => {
-
     console.log('/successBuy', req.body);
     console.log('user', req.user);
-
     //1. User Collection 안에  History 필드 안에  간단한 결제 정보 넣어주기
     let history = [];
     let transactionData = {};
@@ -258,32 +217,13 @@ router.post('/successBuy', auth, (req, res) => {
 
     console.log('history', history);
     console.log('transaction', transactionData);
-
-
-    // User.findOne(
-    //     { _id: req.user._id }
-    // ).exec((err, result) => {
-    //     console.log('result', result);
-    // })
-
-    // User.findOneAndUpdate(
-    //     { _id: req.user._id },
-    //     { $push: { history: history }, $set: { 'cart': [] }},
-    //     { new: true }
-    // ).exec((err, result) => {
-    //     console.log('err', err);
-    //     console.log('FOAU', result)
-    // })
-
     //history 정보 저장 
     User.findOneAndUpdate(
         { _id: req.user._id },
         { $push: { history: history }, $set: { cart: [] } },
         { new: true },
         (err, user) => {
-
             console.log('user', user);
-
             if (err) return res.json({ success: false, err })
             //payment에다가  transactionData정보 저장 
             const payment = new Payment(transactionData)
@@ -325,7 +265,7 @@ router.post('/checkEmail', (req, res) => {
     //이메일 잘 넘어 왔는지 체크
     console.log('newEmail', req.body);
     User.find({ 'email': req.body.email }, (err, result) => {
-        //잘 찾았는지 체크
+        //잘 찾았는지 체크(빈칸 나오면 중복된 메일 없다는 것)
         console.log('result', result);
         //에러 처리
         if(err) return res.send(err)
@@ -345,28 +285,28 @@ router.post('/sendEmail', async (req, res) => {
     //메일 발송하는 사람
     let transporter = nodemailer.createTransport({
         // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
+        // 07.01) gmail 500개 제한으로 네이버로 변경 (오류뜸)...
         service: 'gmail',
-        // host를 gmail로 설정
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
+        host:'smtp.gmail.com',
         auth: {
             //Gmail 주소 입력
-            user: config.gmailAddress,
+            user: config.googleAddress,
             //Gmail 패스워드 입력
-            pass: config.gmailPassword
-        }
+            pass: config.googlePassword
+        },
+        secure: false,
+        tls: {
+            rejectUnauthorized: false
+        },
     })
     //메일 보내기
-    let sendEmail = await transporter.sendMail({
-        from: '',
-        to: req.body.email,
-        subject: '안녕하세요~',
-        text: `인증번호: ${key_for_verify}`
-    })
-    let verifyKey = {
-        verifyKey: key_for_verify
-    }
+        let sendEmail = await transporter.sendMail({
+            from: '',
+            to: req.body.email,
+            subject: '안녕하세요~',
+            text: `인증번호: ${key_for_verify}`
+        })
+    let verifyKey = {verifyKey: key_for_verify}
     res.send(verifyKey)
 })
 module.exports = router;

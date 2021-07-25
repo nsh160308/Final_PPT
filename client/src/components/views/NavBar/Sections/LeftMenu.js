@@ -14,13 +14,13 @@ function LeftMenu(props) {
   return (
     <Menu mode={props.mode}>
       <Menu.Item key="Subscription">
-        <a href="/subscription" style={MenuStyle}>Favorite Video</a>
+        <a href="/subscription" style={MenuStyle}>좋아하는 영상</a>
       </Menu.Item>
       <Menu.Item key="Lookbook">
         <a href="/Lookbook" style={MenuStyle}>Lookbook</a>
       </Menu.Item>
       <Menu.Item key="Shop">
-        <a href="/Shop" style={MenuStyle}>Shop</a>
+        <a href="/Shop" style={MenuStyle}>쇼핑</a>
       </Menu.Item>
     </Menu>
   )

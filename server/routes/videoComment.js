@@ -9,13 +9,10 @@ const { VideoComment } = require("../models/VideoComment");
 
 router.post('/saveComment', (req, res) => {
     console.log('/saveComment',req.body);
-
     if(req.body.newDate) {
         const comment = new VideoComment(req.body)
-
         comment.save((err, comment) => {
             if(err) return res.status(400).json({ success: false, err })
-    
             VideoComment.find({ _id: comment._id })
                 .populate('writer')
                 .exec((err, result) => {
@@ -25,10 +22,8 @@ router.post('/saveComment', (req, res) => {
         })
     } else {
         const comment = new VideoComment(req.body)
-
         comment.save((err, comment) => {
             if(err) return res.status(400).json({ success: false, err })
-    
             VideoComment.find({ _id: comment._id })
                 .populate('writer')
                 .exec((err, result) => {
@@ -36,7 +31,6 @@ router.post('/saveComment', (req, res) => {
                     res.status(200).json({ success:true, comment: result, newDate: false })
                 })
         })
-
     }
 })
 
@@ -71,25 +65,29 @@ router.post('/getComments', (req, res) => {
 
 //선택한 댓글 삭제
 router.post('/deleteComment', (req, res) => {
-    console.log('is true data?', req.body);
-
-    VideoComment.findOneAndDelete({ _id: req.body._id })
+    VideoComment.findOneAndDelete({ _id: req.body._id})
         .exec((err, result) => {
             if(err) res.status(400).json({ success: false, err })
 
-            VideoComment.find()
-                .populate('writer')
-                .exec((err, comments) => {
+            VideoComment.findOneAndDelete({ responseTo: req.body._id})
+                .exec((err, result) => {
                     if(err) res.status(400).json({ success: false, err })
-                    res.status(200).json({ success: true, comments, status: 'delete' })
+
+                    VideoComment.find()
+                        .populate('writer')
+                        .exec((err, result) => {
+                            if(err) res.status(400).json({ success: false, err })
+                            res.status(200).json({ success: true, result, status: 'delete', size: result.length})
+                        })
                 })
+
+            
         })
 })
 
 //선택한 댓글 수정
 router.post('/modifyComment', (req, res) => {
-    console.log('is true data?', req.body);
-
+    //댓글 수정
     VideoComment.findOneAndUpdate(
         { _id: req.body._id},
         { $set: { content: req.body.content, modify: req.body.modify }},

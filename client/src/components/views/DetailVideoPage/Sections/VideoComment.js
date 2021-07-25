@@ -15,7 +15,8 @@ const BtnStyle = {
     fontWeight:"bold",
 }
 function VideoComment(props) {
-
+    console.log('댓글리스트', props.commentLists);
+    console.log("사이즈", props.postSize);
     let videoId = props.videoId;
     const user = useSelector(state => state.user)
     const [commentValue, setcommentValue] = useState("")
@@ -23,18 +24,14 @@ function VideoComment(props) {
     const textAreaHandler = (e) => {
         setcommentValue(e.target.value);
     }
-
     const onSubmitHandler = (e) => {
         e.preventDefault();
-
         //로그인 페이지로 이동
         if(!props.isAuth) {
             console.log("로그인 페이지로 이동")
             return props.history.push('/login');
         }
-
         let variables = {};
-
         //필터링 상태가 newDate면
         if(props.filter === 'newDate') {
             variables = {
@@ -43,7 +40,6 @@ function VideoComment(props) {
                 content: commentValue,
                 newDate: true
             }
-
             Axios.post('/api/videoComment/saveComment', variables)
             .then(result => {
                 if(result.data.success) {
@@ -61,7 +57,6 @@ function VideoComment(props) {
                 content: commentValue,
                 newDate: false
             }
-
             Axios.post('/api/videoComment/saveComment', variables)
             .then(result => {
                 if(result.data.success) {
@@ -73,9 +68,7 @@ function VideoComment(props) {
                 }
             })
         }
-        
     }
-
     const menu = (
         <Menu>
             <Menu.Item>
@@ -85,7 +78,6 @@ function VideoComment(props) {
             </Menu.Item>
         </Menu>
     )
-
     return (
         <div>
             <br />
@@ -96,9 +88,7 @@ function VideoComment(props) {
                 </Dropdown>
             </div>
             <hr />
-
             {/* 댓글입력 */}
-            
             {props.isAuth ?
             <form style={{ display: 'flex' }} onSubmit={onSubmitHandler}>
                 <TextArea
@@ -127,7 +117,7 @@ function VideoComment(props) {
             {props.commentLists && props.commentLists.map((comment, index) => (
                 (!comment.responseTo &&
                 <React.Fragment key={index}>
-                    <SingleComment 
+                    <SingleComment
                         refreshFunction={props.refreshFunction} 
                         comment={comment} 
                         videoId={videoId} 

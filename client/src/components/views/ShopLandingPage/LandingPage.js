@@ -14,19 +14,19 @@ const MetaDesign = {
     fontWeight:"bold",
 }
 
-
 function LandingPage() {
 
-    const [Products, setProducts] = useState([])
-    const [Skip, setSkip] = useState(0)
-    const [Limit, setLimit] = useState(8)
-    const [PostSize, setPostSize] = useState(0)
+    //state관리
+    const [Products, setProducts] = useState([]);
+    const [Skip, setSkip] = useState(0);
+    const [Limit, setLimit] = useState(8);
+    const [PostSize, setPostSize] = useState(0);
     const [Filters, setFilters] = useState({
         continents: [],
         price: [],
         clothes: []
-    })
-    const [SearchTerm, setSearchTerm] = useState("")
+    });
+    const [SearchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         let body = {
@@ -36,6 +36,7 @@ function LandingPage() {
         getProducts(body)
     }, [])
 
+    
     const getProducts = (body) => {
         axios.post('/api/product/products', body)
             .then(response => {
@@ -87,9 +88,8 @@ function LandingPage() {
             limit: Limit,
             filters: filters
         }
-        console.log('body', body);
-        getProducts(body)
-        setSkip(0)
+        getProducts(body);//상품을 가져오고
+        setSkip(0)//스킵 초기화
     }
 
     const handlePrice = (value) => {
@@ -106,16 +106,16 @@ function LandingPage() {
     }
 
     const handleFilters = (filters, category) => {
-        console.log('filters', filters);
-        console.log('category', category);
+        console.log("자식이 건네준 정보", filters, category);
         const newFilters = { ...Filters }
-        newFilters[category] = filters
-        console.log('filters', filters)
+        console.log('기존에 있던 필터링 정보', newFilters);
+        newFilters[category] = filters;
+        console.log('새롭게 만들어낸 필터링 결과 ', newFilters[category]);
         if (category === "price") {
             let priceValues = handlePrice(filters)
             newFilters[category] = priceValues
-        }
-        showFilteredResults(newFilters)
+        }//미구현
+        showFilteredResults(newFilters)//함수 호출
         setFilters(newFilters)
     }
 
@@ -132,28 +132,31 @@ function LandingPage() {
     }
 
     return (
-        <div style={{ width: '95%', margin: '1rem auto'}}>
+        <div style={{ width: '85%', margin: '1rem auto'}}>
             <Row gutter={[16, 16]}>
                 {/* Filter */}
                 <Col lg={4}>
                     <div>
-                        <SubMenuPage handleFilters={filters => handleFilters(filters, "clothes")}/>
+                        {/* 메인 페이지 옆 상품분류 */}
+                        <SubMenuPage handleFilters={handleFilters}/>
                     </div>
                 </Col>
-                {/* List And Search */}
+                {/* 상품 목록들과 검색창 */}
                 <Col lg={20}>
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+                            {/* 상품 검색 창 */}
                             <SearchFeature
                                 refreshFunction={updateSearchTerm}
                             />
                         </div>
-                        {/* Cards */}
+                        <br/>
+                        {/* 상품 */}
                         <Row gutter={[16, 16]} >
                             {renderCards}
                         </Row>
                         <br />
-                        {/* LoadMore */}
+                        {/* 더보기 버튼 */}
                         {PostSize >= Limit &&
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <Button onClick={loadMoreHanlder}>Load More</Button>

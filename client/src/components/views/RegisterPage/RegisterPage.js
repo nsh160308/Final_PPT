@@ -9,6 +9,12 @@ import Axios from 'axios';
 import { USER_SERVER } from './../../Config';
 
 //디자인
+const formikStyle = {
+  fontFamily:"Georgia",
+  fontWeight:"bold",
+}
+
+//디자인
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -89,9 +95,14 @@ function RegisterPage(props) {
     if(!EmailSuccess) {
       return Modal.error({
         title: '등록 오류',
-        content: '중복 확인하세요.'
+        content: '이메일이 중복된 이메일 인지 확인 후 시도해 주세요.'
       })
     }
+    //인증번호 보내면 사용자한테 알려준다.
+    Modal.success({
+      title: '완료',
+      content: '인증번호 전송이 완료됐습니다. 귀하의 이메일을 확인해주세요.'
+    })
     //body 전송
     let variable = {
       email : newEmail
@@ -169,7 +180,8 @@ function RegisterPage(props) {
         <p>정말 가입 하시겠습니까?</p>
         
     </Modal>
-    {/* 회원가입 폼 */}
+
+    {/* 회원가입 폼 (Formik and Yup 라이브러리 사용) */}
     <Formik
       initialValues={{
         name: '',
@@ -209,12 +221,13 @@ function RegisterPage(props) {
             password: values.password,
             image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`
           };
-          //body 객체 저장
+          //가입폼의 정보를 state로 관리
           setBodyObj(dataToSubmit)
           setSubmitting(false);
         }, 500);
       }}
-    >
+    >{/*Formik*/}
+
       {/* 내용 */}
       {props => {
         const {
@@ -228,9 +241,8 @@ function RegisterPage(props) {
         } = props;
         return (
           <div className="app">
-            <h2>회원 가입</h2>
+            
             <Form style={{ minWidth: '525px' }} {...formItemLayout} onSubmit={handleSubmit} >
-
               <Form.Item required label="이름">
                 <Input
                   id="name"
@@ -282,10 +294,14 @@ function RegisterPage(props) {
                     disabled={EmailSuccess}
                     autoComplete="off"
                   />
-                  {/* 이메일 중복확인 버튼 */}
+                  {/* 이메일 중복확인 버튼 
+                  작동방식 - 버튼 2개를 만들어서
+                  state가 false이면 비활성화 상태를 default로 유지해서 중복확인 버튼을 보이게 함
+                  그렇지 않으면 이메일 중복확인이 성공했으므로 disabled를 true로 변경해서
+                  */}
                   {!EmailSuccess ?
                   <Button type="primary" 
-                  disabled={ errors.email && touched.email ? !isButtonVisible : isButtonVisible} 
+                  disabled={ errors.email && touched.email ? true : false} 
                   onClick={() => duplicateCheckEmail(values.email)}>
                   중복 확인
                   </Button>
@@ -300,7 +316,6 @@ function RegisterPage(props) {
 
               <Form.Item required label="인증번호" >
                 <div style={{ display: 'flex' }}>
-                  
                   <Input
                     id="verifyKey"
                     placeholder="인증번호 입력"
@@ -334,7 +349,9 @@ function RegisterPage(props) {
                 )}
               </Form.Item>
 
-              <Form.Item required label="비밀번호" hasFeedback validateStatus={errors.password && touched.password ? "error" : 'success'}>
+              <Form.Item required label="비밀번호" 
+              hasFeedback 
+              validateStatus={errors.password && touched.password ? "error" : 'success'}>
                 <Input
                   id="password"
                   placeholder="최소 여섯 글자 이상"

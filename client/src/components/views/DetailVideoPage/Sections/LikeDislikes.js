@@ -13,7 +13,6 @@ function LikeDislikes(props) {
     const [DisLikeAction, setDisLikeAction] = useState(null)
 
     let variable = {}
-
     //비디오와 댓글의 좋아요 수를 가져오는 것을 분리하기 위해
     //DetailVideoPage에서 해당 컴포넌트한테 video라는 prop을 줌
     if(props.video) {
@@ -32,7 +31,6 @@ function LikeDislikes(props) {
             videoCommentId: props.videoCommentId,
         }
     }
-
     
     useEffect(() => {
         //좋아요 가져오기
@@ -70,12 +68,10 @@ function LikeDislikes(props) {
                 alert("싫어요 가져오기 실패!");
             }
         })
-
     }, [])
 
     //좋아요 클릭 핸들링
     const onLikeHandler = () => {
-
         //좋아요 클릭하지 않은 상태일 때 좋아요 1증가 시킨다.
         if(LikeAction === null) {
             Axios.post('/api/videoLD/upLike', variable)
@@ -110,10 +106,8 @@ function LikeDislikes(props) {
                 })
         }
     }
-
     //싫어요 버튼 핸들링
     const onDisLikeHandler = () => {
-
         //싫어요 버튼 눌렀는데 이미 클릭된 상태일 때,
         if(DisLikeAction !== null) {
             Axios.post('/api/videoLD/downDislike', variable)
@@ -146,7 +140,6 @@ function LikeDislikes(props) {
                 })
         }
     }
-    
     return (
         <div>
             <span key="comment-basic-like">

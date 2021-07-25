@@ -40,14 +40,9 @@ export default function (state = {}, action) {
         case GET_CART_ITEMS:
             return { ...state, cartDetail: action.payload }
         case REMOVE_CART_ITEM:
-            return { ...state, cartDetail: action.payload }
-            // return {
-            //     ...state, cartDetail: action.payload.productInfo,
-            //     userData: {
-            //         ...state.userData,
-            //         cart: action.payload.cart
-            //     }
-            // }
+            return { 
+                ...state, cartDetail: action.payload,
+            }
         case ON_SUCCESS_BUY:
             return {
                 ...state, cartDetail: action.payload.cartDetail,

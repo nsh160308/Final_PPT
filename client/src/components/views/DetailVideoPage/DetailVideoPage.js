@@ -42,7 +42,7 @@ function DetailVideoPage(props) {
 
     useEffect(() => {
 
-        //모든 비디오 정보 가져오기
+        //하나의 비디오 정보 가져오기
         Axios.post('/api/video/getVideoDetail', variable)
             .then(response => {
                 if(response.data.success) {
@@ -141,6 +141,10 @@ function DetailVideoPage(props) {
     //새로운 댓글을 추가합니다.
     const refreshFunction = (newComment) => {
         console.log('새로운 댓글', newComment);
+        if(newComment.comment) {
+            setAllPostSize(AllPostSize + 1);
+            return setComments(Comments.concat(newComment.comment))
+        }
         /**
          * 새로운 댓글을 받은 newComment의 newDate가 false입니다.
          * 필터링을 거친 상태가 아니기 때문에 Comments 상태에 concat()으로 추가합니다.
@@ -150,34 +154,30 @@ function DetailVideoPage(props) {
          */
         if(!newComment.newDate) {
             console.log('그냥 상태');
-            setComments(Comments.concat(newComment.comment));
+            setComments(Comments.concat(newComment));
             setAllPostSize(AllPostSize + 1);
         } else {
             newDateFilters()
         }
     }
-
     //댓글 수정 및 삭제
     const afterRefresh = (commentLists) => {
+        console.log("here???", commentLists);
         let array = [];
         if(commentLists.status === 'modify') {
             Comments.map(comment => {
-                
                 if(comment._id === commentLists.comment._id) {
                     comment = commentLists.comment
                     array.push(comment)
                 } else array.push(comment)
-
                 return array
             })
-
             setComments(array)
-
         } else {
-            setComments(commentLists);
+            setComments(commentLists.result);
+            setAllPostSize(commentLists.size);
         }
     }
-
     //최근 날짜 순
     const newDateFilters = () => {
         console.log('최근 날짜 순 정렬');
@@ -189,7 +189,6 @@ function DetailVideoPage(props) {
         }
         getReplies(body)
     }
-
     if(VideoDetail.writer) {
         const subscribeButton = VideoDetail.writer._id !== localStorage.getItem('userId') && <Subscribe userTo={VideoDetail.writer._id}/>
         return (
@@ -198,19 +197,16 @@ function DetailVideoPage(props) {
                 <Col lg={18} xs={24}>
                     <div style={{ width: '100%', padding:'3rem 4rem' }}>
                         <video style={{ width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls  />
-        
                         <List.Item
                             actions={[ <LikeDislikes video videoId={videoId} />, subscribeButton]}
                         >
-                            
                             <List.Item.Meta
                                 avatar={<Avatar src={VideoDetail.writer.image} />}
                                 title={VideoDetail.writer.name}
                                 description={VideoDetail.description}
                             />
                         </List.Item>
-                        
-                        {/* Comments */}
+                        {/* 댓글 컴포넌트 */}
                         <VideoComment 
                             refreshFunction={refreshFunction} 
                             videoId={videoId} 
@@ -222,7 +218,6 @@ function DetailVideoPage(props) {
                             newDateFilters={newDateFilters}
                             filter={FilteringStatus}
                         />
-
                         {PostSize >= Limit &&
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <button onClick={loadMoreHanlder}>더보기</button>
@@ -232,7 +227,7 @@ function DetailVideoPage(props) {
                 </Col>
                 {/* 사이드 영상 */}
                 <Col lg={6} xs={24}>
-                    <div style={{width:'100%', padding:'3rem 4rem'}}>
+                    <div>
                         <SideVideo />
                     </div>
                 </Col>

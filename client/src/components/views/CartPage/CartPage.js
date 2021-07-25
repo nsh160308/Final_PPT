@@ -61,8 +61,12 @@ function CartPage(props) {
         dispatch(removeCartItem(size, productId))
             .then(response => {
                 console.log('액션 결과',response.payload);
+                console.log("남은 길이", response.payload.length);
                 if (response.payload.length <= 0) {
+                    console.log("남은길이가 0입니다.", response.payload.length);
                     setShowTotal(false)
+                } else {
+                    calculateTotal(response.payload);
                 }
                 setCartDetails(response.payload);
             })
@@ -90,7 +94,7 @@ function CartPage(props) {
 
     return (
         <div style={{...CartStyle}}>
-            <h1>Cart / 장바구니</h1>
+            <h1>장바구니</h1>
             <div>
                 <UserCardBlock products={CartDetails} removeItem={removeFromCart}/>
             </div>
@@ -111,7 +115,7 @@ function CartPage(props) {
                         imageStyle={{
                         height: 60,
                         }}
-                        description={<span>Empty Cart / 장바구니가 비었습니다.</span>}
+                        description={<span>장바구니가 비었습니다.</span>}
                     >
                         <Button type="primary" onClick={movePage}>Go to Shop</Button>
                     </Empty>

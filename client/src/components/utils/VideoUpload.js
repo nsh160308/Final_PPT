@@ -19,23 +19,16 @@ function VideoUpload(props) {
     const [ThumbnailPath, setThumbnailPath] = useState("")
 
     const onDrop = (files) => {
-
         let formData = new FormData();
-
-        const config = {
-            header: { 'content-type': 'multipart/form-data' }
-        }
-
-        formData.append('Video', files[0])
-
-        
+        const config = {header: { 'content-type': 'multipart/form-data' }}
+        formData.append('Video', files[0]);
         //비디오 업로드
         Axios.post('/api/video/uploadfiles', formData, config)
             .then(response => {
                 if(response.data.success) {
                     console.log('비디오 저장',response.data);
                     //비디오가 업로드 된 url저장
-                    setFilePath(response.data.url)
+                    setFilePath(response.data.url);
                     //부모 컴포넌트로 업데이트
                     props.getFilePath(response.data.url);
                     let variable = {
@@ -47,7 +40,6 @@ function VideoUpload(props) {
                         .then(response => {
                             if(response.data.success) {
                                 console.log('썸네일 저장',response.data);
-
                                 //썸네일 저장된 경로랑 영상 길이 저장
                                 setThumbnailPath(response.data.url)
                                 setDuration(response.data.fileDuration)

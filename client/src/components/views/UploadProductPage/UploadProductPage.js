@@ -61,6 +61,7 @@ function UploadProductPage(props) {
     }
 
     const submitHandler = (event) => {
+        console.log('이벤트에 뭐가 들어옴?', event);
         event.preventDefault();
         if (!Title || !Description || !Price || !Cloth || !DetailImages || Images.length === 0) {
             return Modal.error({
@@ -89,7 +90,6 @@ function UploadProductPage(props) {
                 }
             })
     }
-
 
     return (
         <div style={ParentStyle}>

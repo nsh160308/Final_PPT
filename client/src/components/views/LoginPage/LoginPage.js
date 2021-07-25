@@ -5,10 +5,30 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from "react-redux";
 import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
-import { GoogleOutlined, FacebookOutlined, MessageOutlined, } from '@ant-design/icons';
+import { GoogleOutlined, MessageOutlined, } from '@ant-design/icons';
 
 const { Title } = Typography;
 const { Text } = Typography;
+const LoginFormStyle = {
+  fontFamily:"Nanum-Gothic",
+  fontWeight:"bold",
+  color: 'black'
+}
+const SocialFormStyle ={
+  fontFamily:"Nanum-Gothic",
+  fontWeight:"bold",
+  color: 'white'
+}
+const IconsStyle = {
+  fontSize: '20px', 
+  color: 'white' 
+}
+const BtnStyle = {
+  margin: '0px',
+  width: '350px', 
+  height: '32px', 
+  marginBottom: '10px', 
+}
 
 function LoginPage(props) {
   const dispatch = useDispatch();
@@ -84,8 +104,8 @@ function LoginPage(props) {
         } = props;
         return (
           <div className="app">
-            <Title level={2}>로그인</Title>
-            <Form onSubmit={handleSubmit} style={{ width: '350px' }}>
+            <Title level={2} style={{...LoginFormStyle}}>Log In</Title>
+            <Form onSubmit={handleSubmit} style={{ width: '350px', }}>
               {/* 이메일 입력 */}
               <Form.Item required>
                 <Input
@@ -131,54 +151,50 @@ function LoginPage(props) {
                 </label>
               )}
               <Form.Item>
-                <Checkbox id="rememberMe" onChange={handleRememberMe} checked={rememberMe} >자동 로그인</Checkbox>
+                <Checkbox id="rememberMe" onChange={handleRememberMe} style={{...LoginFormStyle,}} checked={rememberMe} >자동 로그인</Checkbox>
                 <a className="login-form-forgot" href="/modifyPassword" style={{ float: 'right' }}>
                   비밀번호 찾기
                   </a>
                 <div>
-                  <Button type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%' }} disabled={isSubmitting} onSubmit={handleSubmit}>
-                    로그인
+                  <Button type="primary" 
+                  htmlType="submit" 
+                  className="login-form-button" 
+                  style={{ minWidth: '100%', ...BtnStyle, ...LoginFormStyle }} 
+                  disabled={isSubmitting} 
+                  onSubmit={handleSubmit}>
+                    Log In
                   </Button>
                 </div>
-                회원이 아니신가요? <a href="/register">지금 가입하러 가기!</a>
+                <span style={{...LoginFormStyle}}>회원이 아니신가요?<a href="/register" >지금 가입하러 가기!</a></span>
               </Form.Item>
             </Form>
-            {/* 구글 로그인 */}
-            <a href="http://localhost:5000/auth/google">
-              <Button style={{margin: '0px', width: '350px', height: '32px', marginBottom: '10px', background: '#ec4646'}}>
-                <div style={{ display: 'flex', justifyContent: 'center'}}>
-                  <GoogleOutlined style={{ fontSize: '20px', color: 'white' }}/>&nbsp;
-                  <Text strong="true" style={{color: 'white'}}>구글 로그인</Text>
-                </div>
-              </Button>
-            </a>
-            {/* 페이스북 로그인 */}
-            <a href="http://localhost:5000/auth/facebook">
-              <Button style={{margin: '0px', width: '350px', height: '32px', marginBottom: '10px', background: '#395693'}}>
-                <div style={{ display: 'flex', justifyContent: 'center'}}>
-                  <FacebookOutlined style={{ fontSize: '20px', color: 'white' }}/>&nbsp;
-                  <Text strong="true" style={{color: 'white'}}>페이스북 로그인</Text>
-                </div>
-              </Button>
-            </a>
-            {/* 카카오 로그인 */}
-            <a href="http://localhost:5000/auth/kakao">
-              <Button style={{margin: '0px', width: '350px', height: '32px', marginBottom: '10px', background: '#FEDE00'}}>
-                <div style={{ display: 'flex', justifyContent: 'center'}}>
-                  <MessageOutlined style={{ fontSize: '20px', color: '#3E2224' }}/>&nbsp;
-                  <Text strong="true" style={{color: '#3E2224'}}>카카오 로그인</Text>
-                </div>
-              </Button>
-            </a>
-            {/* 네이버 로그인 */}
-            <a href="http://localhost:5000/auth/naver">
-              <Button style={{margin: '0px', width: '350px', height: '32px', marginBottom: '10px', background: '#04CF5C'}}>
-                <div style={{ display: 'flex', justifyContent: 'center'}}>
-                  <MessageOutlined style={{ fontSize: '20px', color: 'white' }}/>&nbsp;
-                  <Text strong="true" style={{color: 'white'}}>네이버 로그인</Text>
-                </div>
-              </Button>
-            </a>
+              {/* 구글 로그인 */}
+              <a href="http://localhost:5000/auth/google">
+                <Button style={{...BtnStyle, background: '#ec4646'}}>
+                  <div style={{ display: 'flex', justifyContent: 'center'}}>
+                    <GoogleOutlined style={{...IconsStyle}}/>&nbsp;
+                    <Text strong="true" style={{...SocialFormStyle}}>구글 로그인</Text>
+                  </div>
+                </Button>
+              </a>
+              {/* 카카오 로그인 */}
+              <a href="http://localhost:5000/auth/kakao">
+                <Button style={{...BtnStyle, background: '#FEDE00'}}>
+                  <div style={{ display: 'flex', justifyContent: 'center'}}>
+                    <MessageOutlined style={{...IconsStyle, color: '#3E2224' }}/>&nbsp;
+                    <Text strong="true" style={{...SocialFormStyle, color: '#3E2224'}}>카카오 로그인</Text>
+                  </div>
+                </Button>
+              </a>
+              {/* 네이버 로그인 */}
+              <a href="http://localhost:5000/auth/naver">
+                <Button style={{...BtnStyle, background: '#04CF5C'}}>
+                  <div style={{ display: 'flex', justifyContent: 'center'}}>
+                    <MessageOutlined style={{...IconsStyle}}/>&nbsp;
+                    <Text strong="true" style={{...SocialFormStyle}}>네이버 로그인</Text>
+                  </div>
+                </Button>
+              </a>
           </div>
         );
       }}

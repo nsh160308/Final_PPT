@@ -109,7 +109,7 @@ export function removeCartItem(size, productId) {
     const request = axios.get(`/api/users/removeFromCart?id=${productId}&size=${size}`)
         .then(response => {
             console.log('백엔드에서 준 결과', response.data);
-            //productInfo ,  cart 정보를 조합해서   CartDetail을 만든다. 
+            //productInfo, cart 정보를 조합해 CartDetail 생성 
             response.data.cart.forEach((cartItem, i) => {
                 response.data.productInfo[i].productNumber = i;
                 response.data.productInfo[i].size = cartItem.size;
@@ -129,12 +129,9 @@ export function removeCartItem(size, productId) {
 }
 
 export function onSuccessBuy(data) {
-
     console.log('onsuccess', data);
-
     const request = axios.post(`/api/users/successBuy`, data)
         .then(response => response.data);
-
     return {
         type: ON_SUCCESS_BUY,
         payload: request

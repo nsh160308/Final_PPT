@@ -97,16 +97,13 @@ function ProductInfo(props) {
                     </Select>
                 </Descriptions.Item>
             </Descriptions>
-            
             <br />
             <br />
-
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button size="large" shape="round" type="danger" onClick={clickHandler}>
                     Add to Cart / 장바구니
                 </Button>
             </div>
-
             <ProductComment 
             detail={props.detail} 
             productId={props.detail._id} 
@@ -117,13 +114,11 @@ function ProductInfo(props) {
             newDateFilters={props.newDateFilters}
             replayHandle={props.replayHandle}
             />
-
             {props.postSize >= props.limit &&
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                     <Button type="primary" onClick={props.loadMoreHandler}>Load More</Button>
                 </div>
             }
-
         </div>
     )
 }

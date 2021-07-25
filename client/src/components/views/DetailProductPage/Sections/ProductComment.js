@@ -60,7 +60,7 @@ function ProductComment(props) {
                     setCommentValue("")
                     setOpenButton(false)
                     setRating(0)
-                    props.refreshFunction(result.data.productReview)
+                    props.refreshFunction(result.data.productReview)//입력한 리뷰 정보를 부모한테 넘긴다.
                 } else {
                     alert("상품 리뷰 등록 실패");
                 }
@@ -101,9 +101,7 @@ function ProductComment(props) {
         console.log(SaveContent);
         console.log(SaveReview);
         setIsModalVisible(false);
-
         let variable = {};
-
         //만약 수정 상태라면
         if(ReplyStatus === 'modify') {
             variable = {
@@ -112,7 +110,6 @@ function ProductComment(props) {
                 rating: RatingModify,
                 modify: true
             }
-
             //백엔드로 전송
             Axios.post('/api/productComment/modifyComment', variable)
                 .then(result => {
@@ -124,11 +121,13 @@ function ProductComment(props) {
                     }
                 })
         } else {
+            console.log('리뷰 삭제는 여기서 진행합니다.');
             //댓글의 고유 id를 전달한다.
             if(!props.replayHandle) {
+                console.log("이 코드가 필요할까요?");
                 variable = {
                     _id: SaveReview._id,
-                    repayStatus: false 
+                    replyStatus: false 
                 }
             } else {
                 variable = {
@@ -138,7 +137,6 @@ function ProductComment(props) {
                     limit: 10
                 }
             }
-            
             //댓글을 지운다.
             Axios.post('/api/productComment/deleteComment', variable)
                 .then(result => {
@@ -150,7 +148,6 @@ function ProductComment(props) {
                     }
                 }) 
         }
-        
     };
 
     //모달 취소

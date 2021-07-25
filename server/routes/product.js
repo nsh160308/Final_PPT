@@ -21,7 +21,7 @@ var imgUpload = multer({ storage: imgStorage }).array("file", 5)
 router.post('/image', (req, res) => {
     imgUpload(req, res, err => {
         if (err) {
-            return req.json({ success: false, err })
+            return res.json({ success: false, err })
         }
         let filePathArr = [];
         let fileNameArr = [];
@@ -78,10 +78,12 @@ router.post('/products', (req, res) => {
     let skip = req.body.skip ? parseInt(req.body.skip) : 0;
     let term = req.body.searchTerm
     let findArgs = {};
-    for (let key in req.body.filters) {
-        if (req.body.filters[key].length > 0) {
-            console.log('key', key)
-            if (key === "price") {
+    console.log('필터', req.body.filters);  
+    for (let key in req.body.filters) {//continents, price, clothes 3번 반복하게 된다.
+        console.log('key를 알아보자', key);
+        if (req.body.filters[key].length > 0) {//filters[continents, price, clothes]를 순회하면서 안에 내용이 있다면 분기 처리
+            console.log('key', key);//clothes배열에 필터가 하나 들어가게 된다.
+            if (key === "price") {//price는 아니기 때문에
                 findArgs[key] = {
                     //Greater than equal
                     $gte: req.body.filters[key][0],
@@ -89,12 +91,14 @@ router.post('/products', (req, res) => {
                     $lte: req.body.filters[key][1]
                 }
             } else {
+                console.log("price가 아닌 나머지")
                 findArgs[key] = req.body.filters[key];
-                console.log('findArgs[key]', findArgs);
+                console.log('findArgs', findArgs);
             }
         }
     }
     if (term) {
+        console.log("텀", term);
         Product.find(findArgs)
             .find({ $text: { $search: term } })
             .populate("writer")
@@ -109,7 +113,8 @@ router.post('/products', (req, res) => {
                 })
             })
     } else {
-        Product.find(findArgs)
+        console.log('텀아님');
+        Product.find(findArgs)//{clothes : [1]}
             .populate("writer")
             .sort([[sortBy, order]])
             .skip(skip)
@@ -126,6 +131,8 @@ router.post('/products', (req, res) => {
 
 //id=123123123,324234234,324234234  type=array
 router.get('/products_by_id', (req, res) => {
+
+    console.log("상세정보는 여기서 가져온다");
 
     let type = req.query.type
     let productIds = req.query.id
@@ -147,6 +154,7 @@ router.get('/products_by_id', (req, res) => {
             res.status(200).json({ success: true, product: response})//axios한테 다시 전달됨
         })
     } else {
+        console.log('이미지 정보는 여기를 거친다.');
         Product.findOneAndUpdate(
         { _id: { $in: productIds }},
         {

@@ -3,33 +3,30 @@ import SingleComment from './SingleComment';
 
 function ReplyComment(props) {
     
+    console.log('리플라이', props.commentLists);
+
     const [ChildCommentNumber, setChildCommentNumber] = useState(0)
     const [OpenReplyComments, setOpenReplyComment] = useState(false)
 
     useEffect(() => {
         let commentNumber = 0;
-
         props.commentLists.map((comment, index) => {
+            console.log('카운트', comment);
             if(comment.responseTo === props.parentCommentId) {
                 commentNumber ++
             }
             return commentNumber;
         })
-
         setChildCommentNumber(commentNumber);
-        
-
     }, [props.commentLists])
 
-
     const renderReplyComment = (parentCommentId) => {
-
         return props.commentLists.map((comment, index) => (
             <React.Fragment key={index}>
                 {
                     comment.responseTo === parentCommentId && 
                     <div style={{ width:'80%', marginLeft:'20px'}}>
-                        <SingleComment 
+                        <SingleComment
                             refreshFunction={props.refreshFunction} 
                             comment={comment} 
                             videoId={props.videoId} 
@@ -58,9 +55,6 @@ function ReplyComment(props) {
                 {ChildCommentNumber}개의 댓글 더보기
                 </p>
             }
-            
-            
-
             {/* 대댓글이 많을 수 있으니까 변수로 만듦 */}
             {OpenReplyComments &&
             renderReplyComment(props.parentCommentId)

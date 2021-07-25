@@ -10,7 +10,6 @@ const { Dislike } = require('../models/Dislike');
 
 router.post('/getLikes', (req, res) => {
     let variable = {}
-
     //여기서도 영상의 좋아요를 가져오는지
     //댓글의 좋아요를 가져오는지 구분해야됩니다.
     if(req.body.videoId) {
@@ -18,11 +17,9 @@ router.post('/getLikes', (req, res) => {
     } else {
         variable = {videoCommentId: req.body.videoCommentId}
     }
-
     Like.find(variable)
         .exec((err, likes) => {
             if(err) return res.status(400).json({ success: false, err })
-
             res.status(200).json({ success:true, likes })
         })
 })
@@ -47,9 +44,7 @@ router.post('/getDislikes', (req, res) => {
 
 //좋아요 올리기
 router.post('/upLike', (req, res) => {
-
     let variable = {}
-
     if(req.body.videoId) {
         variable = {
             userId: req.body.userId,
@@ -61,13 +56,10 @@ router.post('/upLike', (req, res) => {
             videoCommentId: req.body.videoCommentId
         }
     }
-
     // 클릭한 정보를 Like 콜렉션에 저장
     const newLike = new Like(variable);
-
     newLike.save((err, likeResult) => {
         if(err) return res.status(400).json({ success: false, err })
-
         // 만약에 Dislike이 이미 클릭 되어있다면, Dislike을 1 감소시킵니다.
         Dislike.findOneAndDelete(variable)
             .exec((err, disLikeResult) => {
