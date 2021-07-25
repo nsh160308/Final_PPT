@@ -1,13 +1,9 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
-
 # testing
 /coverage
-
 # production
 /build
 
@@ -17,7 +13,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# https://help.github.com/articles/ignoring-files/ 더 많은 ignore 사용법 Docs 링크
